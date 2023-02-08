@@ -12,7 +12,8 @@ from plyer import filechooser
 from kivy.properties import ListProperty
 from kivy.uix.button import Button
 from kivy import platform
-
+import logging
+    
 if platform == "android":
     from android.permissions import request_permissions, Permission
     request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, 
@@ -32,6 +33,7 @@ class Main(Widget):
         '''
         Callback function for handling the selection response from Activity.
         '''
+        logging.info(selection)
         self.selection = selection
         #print(str(selection))
 
