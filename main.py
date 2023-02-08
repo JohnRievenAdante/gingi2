@@ -6,7 +6,8 @@ from kivy.clock import Clock
 from random import randint
 from kivy.lang import Builder
 from kivy.uix.image import AsyncImage
-
+from android import loadingscreen
+from android.permissions import request_permissions, Permission
 from plyer import filechooser
 from kivy.properties import ListProperty
 from kivy.uix.button import Button
@@ -40,6 +41,12 @@ class Main(Widget):
 
 class RunApp(App):
     def build(self):
+        loadingscreen.hide_loading_screen()
+        request_permissions([
+            Permission.CAMERA,
+            Permission.WRITE_EXTERNAL_STORAGE,
+            Permission.READ_EXTERNAL_STORAGE
+        ])
         game = Main()
         return game
 
