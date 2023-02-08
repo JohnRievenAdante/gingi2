@@ -55,8 +55,10 @@ class RunApp(App):
             request_permissions([
                 Permission.CAMERA,
                 Permission.WRITE_EXTERNAL_STORAGE,
-                Permission.READ_EXTERNAL_STORAGE
+                Permission.READ_EXTERNAL_STORAGE,Permission.READ_MEDIA_IMAGES
             ])
+            settings_path = app_storage_path()  
+            logging.info(settings_path)  
         game = Main()
         return game
 
