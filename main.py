@@ -11,7 +11,12 @@ from android.permissions import request_permissions, Permission
 from plyer import filechooser
 from kivy.properties import ListProperty
 from kivy.uix.button import Button
+from kivy import platform
 
+if platform == "android":
+    from android.permissions import request_permissions, Permission
+    request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, 
+Permission.READ_EXTERNAL_STORAGE])
 
 class Main(Widget):
 
@@ -41,12 +46,13 @@ class Main(Widget):
 
 class RunApp(App):
     def build(self):
-        loadingscreen.hide_loading_screen()
-        request_permissions([
-            Permission.CAMERA,
-            Permission.WRITE_EXTERNAL_STORAGE,
-            Permission.READ_EXTERNAL_STORAGE
-        ])
+        if platform == "android":
+            from android.permissions import request_permissions, Permission
+            request_permissions([
+                Permission.CAMERA,
+                Permission.WRITE_EXTERNAL_STORAGE,
+                Permission.READ_EXTERNAL_STORAGE
+            ])
         game = Main()
         return game
 
