@@ -58,7 +58,7 @@ class RunApp(App):
                 Permission.READ_EXTERNAL_STORAGE,Permission.READ_MEDIA_IMAGES
             ])
             settings_path = app_storage_path()  
-            logging.info(settings_path)  
+            logging.info(settings_path+" what the fuck")  
         game = Main()
         return game
 
