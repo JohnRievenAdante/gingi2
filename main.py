@@ -6,7 +6,6 @@ from kivy.clock import Clock
 from random import randint
 from kivy.lang import Builder
 from kivy.uix.image import AsyncImage
-from android import loadingscreen, settings
 from android.permissions import request_permissions, Permission
 from plyer import filechooser
 from kivy.properties import ListProperty
@@ -48,8 +47,8 @@ class Main(Widget):
         Update TextInput.text after FileChoose.selection is changed
         via FileChoose.handle_selection.
         '''
-        #self.b_t.ii = 'res1.jpg'
-        #self.box.ii = 'res1.jpg'
+        self.b_t.ii = self.selection[0]
+        self.box.ii = self.selection[0]
 
 class RunApp(App):
     def build(self):
