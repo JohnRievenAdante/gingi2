@@ -6,13 +6,14 @@ from kivy.clock import Clock
 from random import randint
 from kivy.lang import Builder
 from kivy.uix.image import AsyncImage
-from android import loadingscreen
+from android import loadingscreen, settings
 from android.permissions import request_permissions, Permission
 from plyer import filechooser
 from kivy.properties import ListProperty
 from kivy.uix.button import Button
 from kivy import platform
 import logging
+import cv2
 from android.storage import app_storage_path
 settings_path = app_storage_path()  
 logging.info(settings_path)  
@@ -37,6 +38,7 @@ class Main(Widget):
         '''
         logging.info(selection)
         self.selection = selection
+        cv2.imwrite('res1.jpg', self.selection)
         #print(str(selection))
 
 
@@ -45,8 +47,8 @@ class Main(Widget):
         Update TextInput.text after FileChoose.selection is changed
         via FileChoose.handle_selection.
         '''
-        self.b_t.ii = self.selection[0]
-        self.box.ii = self.selection[0]
+        self.b_t.ii = 'res1.jpg'
+        self.box.ii = 'res1.jpg'
 
 class RunApp(App):
     def build(self):
@@ -57,6 +59,7 @@ class RunApp(App):
                 Permission.WRITE_EXTERNAL_STORAGE,
                 Permission.READ_EXTERNAL_STORAGE,Permission.READ_MEDIA_IMAGES
             ])
+            
             settings_path = app_storage_path()  
             logging.info(settings_path+" what the fuck")  
         game = Main()
