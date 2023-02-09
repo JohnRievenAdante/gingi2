@@ -38,7 +38,8 @@ class Main(Widget):
         '''
         logging.info(selection)
         self.selection = selection
-        cv2.imwrite('res1.jpg', self.selection)
+        bro=cv2.imread(selection)
+        cv2.imwrite('res1.jpg', bro)
         #print(str(selection))
 
 
