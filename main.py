@@ -13,7 +13,7 @@ from kivy.properties import ListProperty
 from kivy.uix.button import Button
 from kivy import platform
 import logging
-import cv2
+#import cv2
 from android.storage import app_storage_path
 settings_path = app_storage_path()  
 logging.info(settings_path)  
@@ -38,8 +38,8 @@ class Main(Widget):
         '''
         logging.info(selection)
         self.selection = selection
-        bro=cv2.imread(selection)
-        cv2.imwrite('res1.jpg', bro)
+        #bro=cv2.imread(selection)
+        #cv2.imwrite('res1.jpg', bro)
         #print(str(selection))
 
 
@@ -48,8 +48,8 @@ class Main(Widget):
         Update TextInput.text after FileChoose.selection is changed
         via FileChoose.handle_selection.
         '''
-        self.b_t.ii = 'res1.jpg'
-        self.box.ii = 'res1.jpg'
+        #self.b_t.ii = 'res1.jpg'
+        #self.box.ii = 'res1.jpg'
 
 class RunApp(App):
     def build(self):
