@@ -257,8 +257,8 @@ class SharedStorageExample(App):
                              size_hint=(1, .15))
         self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.test.myapp/')
         self.layout = BoxLayout(orientation='vertical')
-        #self.layout.add_widget(self.label)
-        #self.layout.add_widget(self.button)
+        self.layout.add_widget(self.label)
+        self.layout.add_widget(self.button)
         self.layout.add_widget(self.filechooser)
         return self.layout
 
