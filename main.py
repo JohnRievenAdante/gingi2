@@ -176,10 +176,10 @@ class RunApp(App):
        # self.set_intent()
 
     def build(self):
-        activity.bind(on_activity_result=self.intent_callback)
+        #activity.bind(on_activity_result=self.intent_callback)
         self.label = Label()
         self.box=Image()
-        self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.gingidetect.gingidetect/')
+        self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.test.myapp/')
         return self.label
 
 if __name__ == '__main__':
