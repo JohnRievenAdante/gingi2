@@ -35,7 +35,7 @@ Permission.READ_EXTERNAL_STORAGE,Permission.READ_MEDIA_IMAGES])
 class Main(Widget):
 
     selection = ListProperty([])
-
+    
     def choose(self):
         '''
         Call plyer filechooser API to run a filechooser Activity.
@@ -60,8 +60,10 @@ class Main(Widget):
         Update TextInput.text after FileChoose.selection is changed
         via FileChoose.handle_selection.
         '''
+        media=autoclass('android.media.MediaScannerConnection')
         logging.info(f"{p}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg") 
-        base = URI(f"{path}/mac.jpg")
+        #base = URI(f"{path}/mac.jpg")
+        base=media.scanFile(self.selection.getAbsolutePath(), None)
         self.b_t.ii = base
         self.box.ii = base
         #self.b_t.ii = f"{path}/mac.jpg"
