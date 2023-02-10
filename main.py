@@ -89,6 +89,7 @@ if __name__ == '__main__':
     RunApp().run()
     
 """
+from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 import os.path
@@ -167,7 +168,7 @@ class RunApp(App):
             name2=uri.parse((name))
             logging.info(type(name2))
             logging.info((name2))
-            self.box.source = name
+            #self.box.source = name
 
     def on_start(self):
         self.set_intent()
@@ -176,6 +177,7 @@ class RunApp(App):
         activity.bind(on_activity_result=self.intent_callback)
         self.label = Label()
         self.box=Image()
+        self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.gingidetect.gingidetect/')
         return self.label
 
 if __name__ == '__main__':
