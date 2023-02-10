@@ -83,6 +83,7 @@ if __name__ == '__main__':
     RunApp().run()"""
 from kivy.uix.label import Label
 import os.path
+from kivy.app import App
 from android import activity, mActivity
 from jnius import autoclass
 
