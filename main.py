@@ -423,9 +423,13 @@ class SharedStorageExample(App):
                     self.append("Result copied to app shared "+\
                                 str(exists(path) and shared != None))
                 newsource="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
+            Logger.warning("for loop done")
             self.filechooser = Image(source=newsource)
+            Logger.warning("add image source done")
             self.layout.add_widget(self.filechooser)
+            Logger.warning("add widget done")
             self.display()
+            Logger.warning("display done")
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
             Logger.warning(str(e))
