@@ -1,4 +1,4 @@
-from kivy.app import App
+"""from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
 from kivy.vector import Vector
@@ -63,7 +63,7 @@ class Main(Widget):
         media=autoclass('android.media.MediaScannerConnection')
         logging.info(f"{p}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg") 
         #base = URI(f"{path}/mac.jpg")
-        base=media.scanFile(self.selection.getAbsolutePath(), None)
+        base=media.scanFile(self.selection[0].getAbsolutePath(), None)
         self.b_t.ii = base
         self.box.ii = base
         #self.b_t.ii = f"{path}/mac.jpg"
@@ -103,7 +103,8 @@ class Demo(App):
     REQUEST_CODE = 42 # unique request ID
    
     def set_intent(self):
-        intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+        #intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+        intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         mActivity.startActivityForResult(intent, self.REQUEST_CODE)        
 
@@ -112,10 +113,12 @@ class Demo(App):
             msg = ""
             try:
                 root_uri = intent.getData()
+                logging.info(str(root_uri)+" what the fuck")
                 root_id = DocumentsContract.getTreeDocumentId(root_uri)
                 children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
                 contentResolver = mActivity.getContentResolver();
-                pfd=contentResolver.openFileDescriptor(,"r")
+                
+                #pfd=contentResolver.openFileDescriptor(content_uri,"r")
                 info = [Document.COLUMN_DISPLAY_NAME]
                 logging.info(str(children)+" what the fuck")  
                 logging.info(str(info)+" what the fuck") 
@@ -141,4 +144,3 @@ class Demo(App):
 
 if __name__ == '__main__':
     Demo().run()
-"""
