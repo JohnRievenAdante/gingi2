@@ -120,10 +120,10 @@ class RunApp(App):
                 logging.info(str(root_uri)+" what the fuck")
                 #root_id = DocumentsContract.getTreeDocumentId(root_uri)
                 #children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
-                contentResolver = mActivity.getContentResolver()
-                Widget.box=Image()
-                Widget.box.source = str(root_uri)
-                Widget.add_widget(Widget.box)
+                #contentResolver = mActivity.getContentResolver()
+                
+                
+                #Widget.add_widget(Widget.box)
                 #pfd=contentResolver.openFileDescriptor(content_uri,"r")
                 #info = [Document.COLUMN_DISPLAY_NAME]
                 #logging.info(str(children)+" what the fuck")  
@@ -139,6 +139,7 @@ class RunApp(App):
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
             self.label.text+=msg
+            self.box.source = str(root_uri)
 
     def on_start(self):
         self.set_intent()
@@ -146,7 +147,7 @@ class RunApp(App):
     def build(self):
         activity.bind(on_activity_result=self.intent_callback)
         self.label = Label()
-
+        self.box=Image()
         return self.label
 
 if __name__ == '__main__':
