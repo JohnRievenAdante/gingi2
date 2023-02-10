@@ -407,7 +407,6 @@ class SharedStorageExample(App):
 
     def chooser_callback(self,uri_list):
         try:
-            self.layout.remove_widget(self.filechooser)
             ss = SharedStorage()
             Logger.warning(str(uri_list)+" urilistttttt+++++++++")
             for uri in uri_list:
@@ -423,13 +422,7 @@ class SharedStorageExample(App):
                     self.append("Result copied to app shared "+\
                                 str(exists(path) and shared != None))
                 newsource="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
-            Logger.warning("for loop done")
-            self.filechooser = Image(source=newsource)
-            Logger.warning("add image source done")
-            self.layout.add_widget(self.filechooser)
-            Logger.warning("add widget done")
-            self.display()
-            Logger.warning("display done")
+            self.display(newsource)
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
             Logger.warning(str(e))
@@ -439,8 +432,9 @@ class SharedStorageExample(App):
         self.label_lines.append(name)
 
     @mainthread
-    def display(self):
+    def display(self,ssource):
         if self.label:
+            self.filechooser.source=ssource
             self.label.text = ''
             for r in self.label_lines:
                 self.label.text += fill(r, 40) + '\n'
