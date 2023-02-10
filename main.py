@@ -186,7 +186,9 @@ class RunApp(App):
         try:
             activity = mActivity.getApplicationContext()
             uri = Uri.parse("package:" + activity.getPackageName())
-            intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri)
+            intent = Intent()
+            intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+            #intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri)
             currentActivity = cast(
             "android.app.Activity", PythonActivity.mActivity
             )
