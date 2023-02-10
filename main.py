@@ -246,9 +246,9 @@ class SharedStorageExample(App):
         self.chooser = Chooser(self.chooser_callback)
   
         # cleanup from last time if Android didn't
-        temp = SharedStorage().get_cache_dir()
+        """temp = SharedStorage().get_cache_dir()
         if temp and exists(temp):
-            rmtree(temp)
+            rmtree(temp)"""
 
         # layout
         self.label = Label(text = 'Greetings Earthlings')
