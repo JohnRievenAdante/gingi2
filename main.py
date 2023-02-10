@@ -172,8 +172,8 @@ class bro(Widget):
 class RunApp(App):
     
 
-    def on_start(self):
-        self.set_intent()
+    #def on_start(self):
+       # self.set_intent()
 
     def build(self):
         activity.bind(on_activity_result=self.intent_callback)
