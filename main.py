@@ -145,9 +145,9 @@ class RunApp(App):
             except Exception as e:
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
-            name2=uri.parse(str(name))
-            logging.info(str(name))
-            self.box.source = str(name2)
+            name2=uri.parse((name))
+            logging.info(name)
+            self.box.source = name
 
     def on_start(self):
         self.set_intent()
