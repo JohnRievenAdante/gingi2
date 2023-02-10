@@ -423,7 +423,7 @@ class SharedStorageExample(App):
                     self.append("Result copied to app shared "+\
                                 str(exists(path) and shared != None))
                 newsource="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
-            self.filechooser.source=newsource
+            self.filechooser = Image(source=newsource)
             self.layout.add_widget(self.filechooser)
             self.display()
         except Exception as e:
