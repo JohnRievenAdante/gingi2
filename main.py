@@ -144,7 +144,7 @@ class RunApp(App):
             except Exception as e:
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
-            self.label.text+=msg
+            logging.info(str(name))
             self.box.source = str(name)
 
     def on_start(self):
