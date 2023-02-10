@@ -257,7 +257,7 @@ class SharedStorageExample(App):
                              on_press = self.chooser_start,
                              size_hint=(1, .15))
         #self.filechooser = Image(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.test.myapp/')
-        self.filechooser = Image(source='/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage')
+        self.filechooser = Image(source='/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/test.jpg')
         self.layout = BoxLayout(orientation='vertical')
         self.layout.add_widget(self.label)
         self.layout.add_widget(self.button)
