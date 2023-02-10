@@ -128,8 +128,23 @@ class RunApp(App):
                 logging.info(str(c)+" what the fuck") 
                 c.moveToNext()
                 name = c.getString(0)
+                """
+                try: 
+                    InputStream inputStream = mContext.getContentResolver().openInputStream(uri)
+                    FileOutputStream outputStream = new FileOutputStream(output)
+                    read = 0
+                    bufferSize = 1024
+                    buffers = new byte[bufferSize]
+                    while (read = inputStream.read(buffers) != -1):
+                        outputStream.write(buffers, 0, read)
                     
-                
+
+                    inputStream.close()
+                    outputStream.close()
+
+                except Exception as e: 
+                    msg += str(e) + '\n'  
+                """
                 #Widget.add_widget(Widget.box)
                 #pfd=contentResolver.openFileDescriptor(content_uri,"r")
                 #info = [Document.COLUMN_DISPLAY_NAME]
@@ -146,7 +161,8 @@ class RunApp(App):
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
             name2=uri.parse((name))
-            logging.info(type(name))
+            logging.info(type(name2))
+            logging.info((name2))
             self.box.source = name
 
     def on_start(self):
