@@ -65,7 +65,7 @@ class RunApp(App):
             ])
             
             settings_path = app_storage_path()  
-            logging.info(settings_path+" what the fuck")  
+            logging.info(path+" what the fuck")  
         game = Main()
         return game
 
