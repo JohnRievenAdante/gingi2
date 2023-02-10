@@ -128,6 +128,10 @@ class RunApp(App):
                 logging.info(str(c)+" what the fuck") 
                 c.moveToNext()
                 name = c.getString(0)
+                intent_image = Intent(Intent.ACTION_VIEW)
+                intent_image.setData(uri.parse("Primary:///DCIM/Screenshots/IMG_20210305_150147.jpg"))
+                intent_image.setClassName("org.gingidetect.gingidetect","org.gingidetect.media.Gallery")
+                mActivity.startActivityForResult(intent_image) 
                 """
                 try: 
                     InputStream inputStream = mContext.getContentResolver().openInputStream(uri)
