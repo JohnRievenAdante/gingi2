@@ -60,8 +60,8 @@ class Main(Widget):
         via FileChoose.handle_selection.
         '''
         logging.info(f"{secondary_ext_storage}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg") 
-        #self.b_t.ii = f"{path}/mac.jpg"
-        #self.box.ii = f"{path}/mac.jpg"
+        self.b_t.ii = f"{path}/mac.jpg"
+        self.box.ii = f"{path}/mac.jpg"
         self.b_t.ii = f"{secondary_ext_storage}/q.jpg"
         self.box.ii = f"{secondary_ext_storage}/q.jpg"
 class RunApp(App):
