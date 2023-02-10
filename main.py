@@ -22,6 +22,9 @@ logging.info(path)
 from android.storage import app_storage_path
 settings_path = app_storage_path() 
 p=primary_external_storage_path() 
+from android.storage import secondary_external_storage_path
+secondary_ext_storage = secondary_external_storage_path()
+
 #logging.info(settings_path)  
 if platform == "android":
     from android.permissions import request_permissions, Permission
@@ -59,8 +62,8 @@ class Main(Widget):
         logging.info(f"{path}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg") 
         #self.b_t.ii = f"{path}/mac.jpg"
         #self.box.ii = f"{path}/mac.jpg"
-        self.b_t.ii = f"{p}/mac.jpg"
-        self.box.ii = f"{p}/mac.jpg"
+        self.b_t.ii = f"{secondary_ext_storage}/q.jpg"
+        self.box.ii = f"{secondary_ext_storage}/q.jpg"
 class RunApp(App):
     def build(self):
         if platform == "android":
