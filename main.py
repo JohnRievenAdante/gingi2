@@ -20,7 +20,8 @@ path=Environment.getExternalStorageDirectory().getAbsolutePath()
 logging.info(path) 
 
 from android.storage import app_storage_path
-settings_path = app_storage_path()  
+settings_path = app_storage_path() 
+p=primary_external_storage_path() 
 #logging.info(settings_path)  
 if platform == "android":
     from android.permissions import request_permissions, Permission
@@ -35,8 +36,8 @@ class Main(Widget):
         '''
         Call plyer filechooser API to run a filechooser Activity.
         '''
-        #filechooser.open_file(on_selection=self.handle_selection)
-        filechooser.open_file(path=primary_external_storage_path())
+        filechooser.open_file(on_selection=self.handle_selection)
+        #filechooser.open_file(path=primary_external_storage_path())
        
 
     def handle_selection(self, selection):
@@ -56,9 +57,10 @@ class Main(Widget):
         via FileChoose.handle_selection.
         '''
         logging.info(f"{path}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg") 
-        self.b_t.ii = f"{path}/mac.jpg"
-        self.box.ii = f"{path}/mac.jpg"
-
+        #self.b_t.ii = f"{path}/mac.jpg"
+        #self.box.ii = f"{path}/mac.jpg"
+        self.b_t.ii = f"{p}/mac.jpg"
+        self.box.ii = f"{p}/mac.jpg"
 class RunApp(App):
     def build(self):
         if platform == "android":
