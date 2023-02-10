@@ -89,12 +89,14 @@ if __name__ == '__main__':
     RunApp().run()
     
 """
+from kivy.uix.image import Image
 from kivy.uix.label import Label
 import os.path
 from kivy.app import App
 from android import activity, mActivity
 from jnius import autoclass
 import logging
+from kivy.uix.widget import Widget
 Intent = autoclass('android.content.Intent')
 DocumentsContract = autoclass('android.provider.DocumentsContract')
 Document = autoclass('android.provider.DocumentsContract$Document')
@@ -119,7 +121,9 @@ class RunApp(App):
                 #root_id = DocumentsContract.getTreeDocumentId(root_uri)
                 #children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
                 contentResolver = mActivity.getContentResolver()
-                self.box.ii = str(root_uri)
+                Widget.box=Image()
+                Widget.box.source = str(root_uri)
+                Widget.add_widget(Widget.box)
                 #pfd=contentResolver.openFileDescriptor(content_uri,"r")
                 #info = [Document.COLUMN_DISPLAY_NAME]
                 #logging.info(str(children)+" what the fuck")  
@@ -133,7 +137,7 @@ class RunApp(App):
                 #c.close()
             except Exception as e:
                 msg += str(e) + '\n'
-                logging.info(e) 
+                logging.info(str(e)) 
             self.label.text+=msg
 
     def on_start(self):
