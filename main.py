@@ -127,7 +127,7 @@ class RunApp(App):
                 c = contentResolver.query(root_uri, None, None, None, None)
                 logging.info(str(c)+" what the fuck") 
                 c.moveToNext()
-                name = str(c.getString(0))
+                name = c.getString(0)
                     
                 
                 #Widget.add_widget(Widget.box)
@@ -146,7 +146,7 @@ class RunApp(App):
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
             name2=uri.parse((name))
-            logging.info(name)
+            logging.info(type(name))
             self.box.source = name
 
     def on_start(self):
