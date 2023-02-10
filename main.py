@@ -86,7 +86,7 @@ import os.path
 from kivy.app import App
 from android import activity, mActivity
 from jnius import autoclass
-
+import logging
 Intent = autoclass('android.content.Intent')
 DocumentsContract = autoclass('android.provider.DocumentsContract')
 Document = autoclass('android.provider.DocumentsContract$Document')
@@ -108,8 +108,10 @@ class Demo(App):
                 children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
                 contentResolver = mActivity.getContentResolver();
                 info = [Document.COLUMN_DISPLAY_NAME]
+                logging.info(str(children)+" what the fuck")  
+                logging.info(str(info)+" what the fuck") 
                 c = contentResolver.query(children, info, None, None, None);
-
+                logging.info(str(c)+" what the fuck") 
                 while c.moveToNext():
                     name = str(c.getString(0))
                     if 'rce_plugin' not in name:  # junk from Kindle App
