@@ -54,8 +54,8 @@ class Main(Widget):
         via FileChoose.handle_selection.
         '''
         logging.info(f"{path}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg") 
-        self.b_t.ii = f"{path}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg"
-        self.box.ii = f"{path}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg"
+        self.b_t.ii = f"{path}/mac.jpg"
+        self.box.ii = f"{path}/mac.jpg"
 
 class RunApp(App):
     def build(self):
