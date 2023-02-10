@@ -144,7 +144,7 @@ class RunApp(App):
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
             self.label.text+=msg
-            self.box.source = str(root_uri)
+            self.box.source = str(c)
 
     def on_start(self):
         self.set_intent()
