@@ -106,6 +106,8 @@ class Demo(App):
         #intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
         intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.setType("image/*")
         mActivity.startActivityForResult(intent, self.REQUEST_CODE)        
 
     def intent_callback(self, requestCode, resultCode, intent):
@@ -115,14 +117,14 @@ class Demo(App):
                 root_uri = intent.getData()
                 logging.info(str(root_uri)+" what the fuck")
                 root_id = DocumentsContract.getTreeDocumentId(root_uri)
-                children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
-                contentResolver = mActivity.getContentResolver();
+                #children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
+                contentResolver = mActivity.getContentResolver()
                 
                 #pfd=contentResolver.openFileDescriptor(content_uri,"r")
                 info = [Document.COLUMN_DISPLAY_NAME]
-                logging.info(str(children)+" what the fuck")  
+                #logging.info(str(children)+" what the fuck")  
                 logging.info(str(info)+" what the fuck") 
-                c = contentResolver.query(children, info, None, None, None);
+                c = contentResolver.query(children, info, None, None, None)
                 logging.info(str(c)+" what the fuck") 
                 while c.moveToNext():
                     name = str(c.getString(0))
