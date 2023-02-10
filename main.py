@@ -1,4 +1,4 @@
-"""from kivy.app import App
+from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
 from kivy.vector import Vector
@@ -12,6 +12,7 @@ from kivy.properties import ListProperty
 from kivy.uix.button import Button
 from kivy import platform
 import logging
+import uri
 #import cv2
 from jnius import autoclass
 from android.storage import primary_external_storage_path
@@ -60,8 +61,11 @@ class Main(Widget):
         via FileChoose.handle_selection.
         '''
         logging.info(f"{p}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg") 
-        self.b_t.ii = f"{path}/mac.jpg"
-        self.box.ii = f"{path}/mac.jpg"
+        base = URI(f"{path}/mac.jpg")
+        self.b_t.ii = base
+        self.box.ii = base
+        #self.b_t.ii = f"{path}/mac.jpg"
+        #self.box.ii = f"{path}/mac.jpg"
         #self.b_t.ii = f"{secondary_ext_storage}/q.jpg"
         #self.box.ii = f"{secondary_ext_storage}/q.jpg"
 class RunApp(App):
@@ -80,7 +84,9 @@ class RunApp(App):
         return game
 
 if __name__ == '__main__':
-    RunApp().run()"""
+    RunApp().run()
+    
+"""
 from kivy.uix.label import Label
 import os.path
 from kivy.app import App
@@ -107,6 +113,7 @@ class Demo(App):
                 root_id = DocumentsContract.getTreeDocumentId(root_uri)
                 children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
                 contentResolver = mActivity.getContentResolver();
+                pfd=contentResolver.openFileDescriptor(,"r")
                 info = [Document.COLUMN_DISPLAY_NAME]
                 logging.info(str(children)+" what the fuck")  
                 logging.info(str(info)+" what the fuck") 
@@ -132,3 +139,4 @@ class Demo(App):
 
 if __name__ == '__main__':
     Demo().run()
+"""
