@@ -51,9 +51,9 @@ class Main(Widget):
         Update TextInput.text after FileChoose.selection is changed
         via FileChoose.handle_selection.
         '''
-        logging.info(f"{path}/{self.selection[0]}") 
-        self.b_t.ii = f"{path}/{self.selection[0]}"
-        self.box.ii = f"{path}/{self.selection[0]}"
+        logging.info(f"{path}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg") 
+        self.b_t.ii = f"{path}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg"
+        self.box.ii = f"{path}/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg"
 
 class RunApp(App):
     def build(self):
