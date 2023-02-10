@@ -125,7 +125,7 @@ class RunApp(App):
                 contentResolver = mActivity.getContentResolver()
                 c = contentResolver.query(root_uri, None, None, None, None)
                 logging.info(str(c)+" what the fuck") 
-               
+                c.moveToNext()
                 name = str(c.getString(0))
                     
                 
