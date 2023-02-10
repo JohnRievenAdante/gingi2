@@ -180,7 +180,7 @@ class RunApp(App):
         self.label = Label()
         self.box=Image()
         self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.test.myapp/')
-        return self.label
+        return self.filechooser
 
 if __name__ == '__main__':
     RunApp().run()
