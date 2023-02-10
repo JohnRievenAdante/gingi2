@@ -98,10 +98,16 @@ from android import activity, mActivity
 from jnius import autoclass
 import logging
 from kivy.uix.widget import Widget
+from jnius import cast
+
 Intent = autoclass('android.content.Intent')
 DocumentsContract = autoclass('android.provider.DocumentsContract')
 Document = autoclass('android.provider.DocumentsContract$Document')
-uri=autoclass('android.net.Uri')
+PythonActivity = autoclass("org.kivy.android.PythonActivity")
+Environment = autoclass("android.os.Environment")
+Settings = autoclass("android.provider.Settings")
+Uri=autoclass('android.net.Uri')
+
 class bro(Widget):
     REQUEST_CODE = 42 # unique request ID
    
@@ -130,7 +136,7 @@ class bro(Widget):
                 c.moveToNext()
                 name = c.getString(0)
                 intent_image = Intent(Intent.ACTION_VIEW)
-                intent_image.setData(uri.parse("Primary:///DCIM/Screenshots/IMG_20210305_150147.jpg"))
+                intent_image.setData(Uri.parse("Primary:///DCIM/Screenshots/IMG_20210305_150147.jpg"))
                 intent_image.setClassName("org.gingidetect.gingidetect","org.gingidetect.media.Gallery")
                 mActivity.startActivityForResult(intent_image) 
                 """
@@ -165,7 +171,7 @@ class bro(Widget):
             except Exception as e:
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
-            name2=uri.parse((name))
+            name2=Uri.parse((name))
             logging.info(type(name2))
             logging.info((name2))
             #self.box.source = name
@@ -177,9 +183,25 @@ class RunApp(App):
 
     def build(self):
         #activity.bind(on_activity_result=self.intent_callback)
+        try:
+            activity = mActivity.getApplicationContext()
+            uri = Uri.parse("package:" + activity.getPackageName())
+            intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri)
+            currentActivity = cast(
+            "android.app.Activity", PythonActivity.mActivity
+            )
+            currentActivity.startActivityForResult(intent, 101)
+        except:
+            intent = Intent()
+            intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+            currentActivity = cast(
+            "android.app.Activity", PythonActivity.mActivity
+            )
+            currentActivity.startActivityForResult(intent, 101) 
         self.label = Label()
         self.box=Image()
-        self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.test.myapp/')
+        #self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.test.myapp/')
+        self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/storage/emulated/0/')
         return self.filechooser
 
 if __name__ == '__main__':
