@@ -106,8 +106,8 @@ class RunApp(App):
    
     def set_intent(self):
         #intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        #intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        #intent = Intent(Intent.ACTION_GET_CONTENT)
         #intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setType("image/*")
@@ -118,11 +118,15 @@ class RunApp(App):
             msg = ""
             try:
                 root_uri = intent.getData()
-                logging.info(type(root_uri)+" what the fuck")
+               
                 #root_id = DocumentsContract.getTreeDocumentId(root_uri)
                 #children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
                 contentResolver = mActivity.getContentResolver()
-                
+                c = contentResolver.query(root_uri, None, None, None, None)
+                logging.info(str(c)+" what the fuck") 
+                while c.moveToNext():
+                    name = str(c.getString(0))
+                    msg += name + '\n'
                 
                 #Widget.add_widget(Widget.box)
                 #pfd=contentResolver.openFileDescriptor(content_uri,"r")
