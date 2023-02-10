@@ -116,6 +116,7 @@ class RunApp(App):
     def intent_callback(self, requestCode, resultCode, intent):
         if requestCode == self.REQUEST_CODE:
             msg = ""
+            name=""
             try:
                 root_uri = intent.getData()
                
