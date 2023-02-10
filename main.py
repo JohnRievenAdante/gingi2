@@ -13,9 +13,13 @@ from kivy.uix.button import Button
 from kivy import platform
 import logging
 #import cv2
+from jnius import autoclass
+Environment=autoclass('android.os.Environment')
+path=Environment.getExternalStorageDirectory().getAbsolutePath
+logging.info(path) 
 from android.storage import app_storage_path
 settings_path = app_storage_path()  
-logging.info(settings_path)  
+#logging.info(settings_path)  
 if platform == "android":
     from android.permissions import request_permissions, Permission
     request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, 
