@@ -102,7 +102,7 @@ Intent = autoclass('android.content.Intent')
 DocumentsContract = autoclass('android.provider.DocumentsContract')
 Document = autoclass('android.provider.DocumentsContract$Document')
 uri=autoclass('android.net.Uri')
-class RunApp(App):
+class bro(Widget):
     REQUEST_CODE = 42 # unique request ID
    
     def set_intent(self):
@@ -169,6 +169,8 @@ class RunApp(App):
             logging.info(type(name2))
             logging.info((name2))
             #self.box.source = name
+class RunApp(App):
+    
 
     def on_start(self):
         self.set_intent()
