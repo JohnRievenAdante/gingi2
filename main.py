@@ -212,7 +212,7 @@ class RunApp(App):
 if __name__ == '__main__':
     RunApp().run()
 """
-
+from kivy.uix.filechooser import FileChooserListView
 from kivy.app import App
 from kivy.clock import mainthread
 from kivy.core.window import Window
@@ -223,6 +223,7 @@ from kivy.logger import Logger
 from os.path import exists, join
 from shutil import rmtree
 from textwrap import fill
+import logging
 from android import mActivity, autoclass, api_version
 
 from androidstorage4kivy import SharedStorage, Chooser
@@ -254,9 +255,11 @@ class SharedStorageExample(App):
         self.button = Button(text = 'Choose an image file',
                              on_press = self.chooser_start,
                              size_hint=(1, .15))
+        self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/storage/emulated/0/')
         self.layout = BoxLayout(orientation='vertical')
-        self.layout.add_widget(self.label)
-        self.layout.add_widget(self.button)
+        #self.layout.add_widget(self.label)
+        #self.layout.add_widget(self.button)
+        self.layout.add_widget(self.filechooser)
         return self.layout
 
     def on_start(self):
@@ -349,7 +352,9 @@ class SharedStorageExample(App):
         # on my phones CHART_4.jpg exists
         path8 = ss.copy_from_shared(join(Environment.DIRECTORY_PICTURES,
                                          'test.jpg'))
+        logging.info("copy from shared storage ok")
         share8 = ss.copy_to_shared(path8)
+        logging.info("copy to app package ok")
         #del8 = ss.delete_shared(share8)
 
         #################################
