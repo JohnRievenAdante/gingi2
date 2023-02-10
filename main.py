@@ -133,7 +133,7 @@ class RunApp(App):
                 c.close()
             except Exception as e:
                 msg += str(e) + '\n'
-                logging.info(str(c)+"error lods") 
+                logging.info("error lods") 
             self.label.text+=msg
 
     def on_start(self):
