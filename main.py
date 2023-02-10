@@ -99,7 +99,7 @@ Intent = autoclass('android.content.Intent')
 DocumentsContract = autoclass('android.provider.DocumentsContract')
 Document = autoclass('android.provider.DocumentsContract$Document')
 
-class Demo(App):
+class RunApp(App):
     REQUEST_CODE = 42 # unique request ID
    
     def set_intent(self):
@@ -133,6 +133,7 @@ class Demo(App):
                 c.close()
             except Exception as e:
                 msg += str(e) + '\n'
+                logging.info(str(c)+"error lods") 
             self.label.text+=msg
 
     def on_start(self):
@@ -145,4 +146,4 @@ class Demo(App):
         return self.label
 
 if __name__ == '__main__':
-    Demo().run()
+    RunApp().run()
