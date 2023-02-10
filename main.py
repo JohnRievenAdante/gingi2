@@ -106,8 +106,9 @@ class RunApp(App):
    
     def set_intent(self):
         #intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        #intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent = Intent(Intent.ACTION_GET_CONTENT)
+        #intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setType("image/*")
         mActivity.startActivityForResult(intent, self.REQUEST_CODE)        
