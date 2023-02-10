@@ -408,15 +408,19 @@ class SharedStorageExample(App):
     def chooser_callback(self,uri_list):
         try:
             ss = SharedStorage()
+            Logger.warning(str(uri_list)+" urilistttttt+++++++++")
             for uri in uri_list:
                 # copy to private
+                Logger.warning(str(uri)+" uriiiiiiiiii+++++++++")
                 path = ss.copy_from_shared(uri)
+                Logger.warning(str(path)+" pathhhhhhhhhhh+++++++++")
                 if path:
                     # then to app shared
                     shared = ss.copy_to_shared(path)
+                    Logger.warning(str(shared)+" sharedddddddd+++++++++")
                     self.append("Result copied to app shared "+\
                                 str(exists(path) and shared != None))
-                    self.filechooser.source=shared
+                    #self.filechooser.source="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+
             self.display()
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
