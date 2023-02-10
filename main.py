@@ -124,9 +124,9 @@ class RunApp(App):
                 contentResolver = mActivity.getContentResolver()
                 c = contentResolver.query(root_uri, None, None, None, None)
                 logging.info(str(c)+" what the fuck") 
-                while c.moveToNext():
-                    name = str(c.getString(0))
-                    msg += name + '\n'
+               
+                name = str(c.getString(0))
+                    
                 
                 #Widget.add_widget(Widget.box)
                 #pfd=contentResolver.openFileDescriptor(content_uri,"r")
@@ -144,7 +144,7 @@ class RunApp(App):
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
             self.label.text+=msg
-            self.box.source = str(c)
+            self.box.source = str(name)
 
     def on_start(self):
         self.set_intent()
