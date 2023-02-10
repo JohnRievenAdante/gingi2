@@ -278,7 +278,7 @@ class SharedStorageExample(App):
         app_title = str(ss.get_app_title())
         self.label_lines = []
         self.display()
-        self.append("Cache Dir Exists:  " + str(exists(ss.get_cache_dir())))
+        self.append("Cache Dir Exists:  " + str(ss.get_cache_dir()))
 
         ############################################################
         # copy to app shared storage   copy_to_shared(private_file)
