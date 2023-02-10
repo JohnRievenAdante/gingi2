@@ -413,6 +413,7 @@ class SharedStorageExample(App):
                 # copy to private
                 Logger.warning(str(uri)+" uriiiiiiiiii+++++++++")
                 path = ss.copy_from_shared(uri)
+                filename=str(path).split("/")[-1]
                 Logger.warning(str(path)+" pathhhhhhhhhhh+++++++++")
                 if path:
                     # then to app shared
@@ -426,8 +427,8 @@ class SharedStorageExample(App):
                     name = c.getString(0)
                     Logger.warning(str(c)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
                     Logger.warning(str(shared)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
-                    Logger.warning(str(name)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
-                    #self.filechooser.source="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+
+                    Logger.warning(str(filename)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
+                    self.filechooser.source="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
             self.display()
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
