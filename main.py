@@ -279,7 +279,7 @@ class SharedStorageExample(App):
         ss = SharedStorage()
         app_title = str(ss.get_app_title())
         self.label_lines = []
-        self.display()
+        self.display("")
         self.append("Cache Dir Exists:  " + str(ss.get_cache_dir()))
 
         ############################################################
@@ -399,7 +399,7 @@ class SharedStorageExample(App):
                                                     exists(path8)))
         self.append("copy_to_shared this app       " + str(share8 != None))"""
         #self.append("delete copy from other " + str(del8))
-        self.display()
+        self.display("")
 
     # Chooser interface
     def chooser_start(self,bt):
@@ -408,17 +408,13 @@ class SharedStorageExample(App):
     def chooser_callback(self,uri_list):
         try:
             ss = SharedStorage()
-            Logger.warning(str(uri_list)+" urilistttttt+++++++++")
             for uri in uri_list:
                 # copy to private
-                Logger.warning(str(uri)+" uriiiiiiiiii+++++++++")
                 path = ss.copy_from_shared(uri)
                 filename=str(path).split("/")[-1]
-                Logger.warning(str(path)+" pathhhhhhhhhhh+++++++++")
                 if path:
                     # then to app shared
                     shared = ss.copy_to_shared(path)
-                    Logger.warning(str(shared)+" sharedddddddd+++++++++")
                     self.append("Result copied to app shared "+\
                                 str(exists(path) and shared != None))
                 newsource="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
