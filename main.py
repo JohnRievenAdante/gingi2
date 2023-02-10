@@ -407,6 +407,7 @@ class SharedStorageExample(App):
 
     def chooser_callback(self,uri_list):
         try:
+            self.layout.remove_widget(self.filechooser)
             ss = SharedStorage()
             Logger.warning(str(uri_list)+" urilistttttt+++++++++")
             for uri in uri_list:
@@ -423,6 +424,7 @@ class SharedStorageExample(App):
                                 str(exists(path) and shared != None))
                 newsource="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
             self.filechooser.source=newsource
+            self.layout.add_widget(self.filechooser)
             self.display()
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
