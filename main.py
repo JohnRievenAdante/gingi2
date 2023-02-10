@@ -117,10 +117,10 @@ class RunApp(App):
             msg = ""
             try:
                 root_uri = intent.getData()
-                logging.info(str(root_uri)+" what the fuck")
+                logging.info(type(root_uri)+" what the fuck")
                 #root_id = DocumentsContract.getTreeDocumentId(root_uri)
                 #children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
-                #contentResolver = mActivity.getContentResolver()
+                contentResolver = mActivity.getContentResolver()
                 
                 
                 #Widget.add_widget(Widget.box)
