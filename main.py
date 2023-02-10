@@ -1,4 +1,4 @@
-from kivy.app import App
+"""from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
 from kivy.vector import Vector
@@ -80,4 +80,52 @@ class RunApp(App):
         return game
 
 if __name__ == '__main__':
-    RunApp().run()
+    RunApp().run()"""
+from kivy.uix.label import Label
+import os.path
+from android import activity, mActivity
+from jnius import autoclass
+
+Intent = autoclass('android.content.Intent')
+DocumentsContract = autoclass('android.provider.DocumentsContract')
+Document = autoclass('android.provider.DocumentsContract$Document')
+
+class Demo(App):
+    REQUEST_CODE = 42 # unique request ID
+   
+    def set_intent(self):
+        intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        mActivity.startActivityForResult(intent, self.REQUEST_CODE)        
+
+    def intent_callback(self, requestCode, resultCode, intent):
+        if requestCode == self.REQUEST_CODE:
+            msg = ""
+            try:
+                root_uri = intent.getData()
+                root_id = DocumentsContract.getTreeDocumentId(root_uri)
+                children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
+                contentResolver = mActivity.getContentResolver();
+                info = [Document.COLUMN_DISPLAY_NAME]
+                c = contentResolver.query(children, info, None, None, None);
+
+                while c.moveToNext():
+                    name = str(c.getString(0))
+                    if 'rce_plugin' not in name:  # junk from Kindle App
+                        msg += name + '\n'
+                c.close()
+            except Exception as e:
+                msg += str(e) + '\n'
+            self.label.text+=msg
+
+    def on_start(self):
+        self.set_intent()
+
+    def build(self):
+        activity.bind(on_activity_result=self.intent_callback)
+        self.label = Label()
+
+        return self.label
+
+if __name__ == '__main__':
+    Demo().run()
