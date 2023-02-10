@@ -416,6 +416,7 @@ class SharedStorageExample(App):
                     shared = ss.copy_to_shared(path)
                     self.append("Result copied to app shared "+\
                                 str(exists(path) and shared != None))
+                    self.filechooser.source=shared
             self.display()
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
