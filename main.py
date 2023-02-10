@@ -116,24 +116,24 @@ class RunApp(App):
             try:
                 root_uri = intent.getData()
                 logging.info(str(root_uri)+" what the fuck")
-                root_id = DocumentsContract.getTreeDocumentId(root_uri)
+                #root_id = DocumentsContract.getTreeDocumentId(root_uri)
                 #children = DocumentsContract.buildChildDocumentsUriUsingTree(root_uri,root_id)
                 contentResolver = mActivity.getContentResolver()
-                
+                self.box.ii = str(root_uri)
                 #pfd=contentResolver.openFileDescriptor(content_uri,"r")
-                info = [Document.COLUMN_DISPLAY_NAME]
+                #info = [Document.COLUMN_DISPLAY_NAME]
                 #logging.info(str(children)+" what the fuck")  
-                logging.info(str(info)+" what the fuck") 
-                c = contentResolver.query(children, info, None, None, None)
-                logging.info(str(c)+" what the fuck") 
-                while c.moveToNext():
-                    name = str(c.getString(0))
-                    if 'rce_plugin' not in name:  # junk from Kindle App
-                        msg += name + '\n'
-                c.close()
+                #logging.info(str(info)+" what the fuck") 
+                #c = contentResolver.query(children, info, None, None, None)
+                #logging.info(str(c)+" what the fuck") 
+                #while c.moveToNext():
+                   # name = str(c.getString(0))
+                    #if 'rce_plugin' not in name:  # junk from Kindle App
+                        #msg += name + '\n'
+                #c.close()
             except Exception as e:
                 msg += str(e) + '\n'
-                logging.info("error lods") 
+                logging.info(e) 
             self.label.text+=msg
 
     def on_start(self):
