@@ -35,7 +35,9 @@ class Main(Widget):
         '''
         Call plyer filechooser API to run a filechooser Activity.
         '''
-        filechooser.open_file(on_selection=self.handle_selection)
+        #filechooser.open_file(on_selection=self.handle_selection)
+        filechooser.open_file(path=primary_external_storage_path())
+       
 
     def handle_selection(self, selection):
         '''
@@ -66,7 +68,7 @@ class RunApp(App):
                 Permission.WRITE_EXTERNAL_STORAGE,
                 Permission.READ_EXTERNAL_STORAGE,Permission.READ_MEDIA_IMAGES
             ])
-            
+            from android.storage import primary_external_storage_path
             settings_path = app_storage_path()  
             logging.info(str(path)+" what the fuck")  
         game = Main()
