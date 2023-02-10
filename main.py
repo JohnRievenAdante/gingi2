@@ -14,7 +14,7 @@ from kivy import platform
 import logging
 #import cv2
 from jnius import autoclass
-
+from android.storage import primary_external_storage_path
 Environment=autoclass('android.os.Environment')
 path=Environment.getExternalStorageDirectory().getAbsolutePath()
 logging.info(path) 
