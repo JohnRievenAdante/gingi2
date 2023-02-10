@@ -100,7 +100,7 @@ from kivy.uix.widget import Widget
 Intent = autoclass('android.content.Intent')
 DocumentsContract = autoclass('android.provider.DocumentsContract')
 Document = autoclass('android.provider.DocumentsContract$Document')
-
+uri=autoclass('android.net.Uri')
 class RunApp(App):
     REQUEST_CODE = 42 # unique request ID
    
@@ -117,6 +117,7 @@ class RunApp(App):
         if requestCode == self.REQUEST_CODE:
             msg = ""
             name=""
+            name2=""
             try:
                 root_uri = intent.getData()
                
@@ -144,8 +145,9 @@ class RunApp(App):
             except Exception as e:
                 msg += str(e) + '\n'
                 logging.info(str(e)) 
+            name2=uri.parse(str(name))
             logging.info(str(name))
-            self.box.source = str(name)
+            self.box.source = str(name2)
 
     def on_start(self):
         self.set_intent()
