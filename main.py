@@ -422,10 +422,11 @@ class SharedStorageExample(App):
                                 str(exists(path) and shared != None))
                     contentResolver = mActivity.getContentResolver()
                     c = contentResolver.query(shared, None, None, None, None)
-                    c.moveToNext()
+                    
                     name = c.getString(0)
                     Logger.warning(str(c)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
                     Logger.warning(str(shared)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
+                    Logger.warning(str(name)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
                     #self.filechooser.source="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+
             self.display()
         except Exception as e:
