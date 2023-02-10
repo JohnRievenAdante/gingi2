@@ -421,14 +421,8 @@ class SharedStorageExample(App):
                     Logger.warning(str(shared)+" sharedddddddd+++++++++")
                     self.append("Result copied to app shared "+\
                                 str(exists(path) and shared != None))
-                    contentResolver = mActivity.getContentResolver()
-                    c = contentResolver.query(shared, None, None, None, None)
-                    c.moveToNext()
-                    name = c.getString(0)
-                    Logger.warning(str(c)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
-                    Logger.warning(str(shared)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
-                    Logger.warning(str(filename)+" file putanginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////////////-----------")
-                    self.filechooser.source="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
+                newsource="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
+            self.filechooser.source=newsource
             self.display()
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
