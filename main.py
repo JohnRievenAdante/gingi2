@@ -1,228 +1,118 @@
-from kivy.uix.filechooser import FileChooserListView
-from kivy.app import App
-from kivy.clock import mainthread
+
 from kivy.core.window import Window
+from kivymd.app import MDApp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.logger import Logger
-from os.path import exists, join
 from shutil import rmtree
 from textwrap import fill
-import logging
 import time
 import cv2
 import numpy as np
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
+from kivy.uix.image import Image
+from kivy.animation import Animation
+from kivy.properties import ObjectProperty
+from kivy.clock import Clock
 from kivy.graphics import Rotate, PushMatrix, PopMatrix
 from kivy.uix.camera import Camera
-from android import mActivity, autoclass, api_version
-from kivy.uix.image import Image
-
+from kivy.core.text import LabelBase
 from androidstorage4kivy import SharedStorage, Chooser
 from android_permissions import AndroidPermissions
+from kivy.core.window import Window
+from android import mActivity, autoclass, api_version
 
-Environment = autoclass('android.os.Environment')
+
+LabelBase.register(name="Roboto", 
+                   fn_regular= "asset/Roboto/Montserrat-Bold.ttf")
+LabelBase.register(name="Montserrat", 
+                   fn_regular= "asset/Roboto/Montserrat-Light.ttf")
+LabelBase.register(name="Rob", 
+                   fn_regular= "asset/Roboto/Roboto-Regular.ttf")
 
 
-class MainScreen(Screen,FloatLayout):
+
+class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen,self).__init__(**kwargs)
-        self.btn = Button(text ="Take a Picture",on_press = self.cam,size_hint=[0.35,0.05],pos_hint={"x":0.35,"top":0.4})
-        self.add_widget(self.btn)
-        self.btn2 = Button(text ="Choose Existing", on_press=self.switch_screen,size_hint=[0.35,0.05],pos_hint={"x":0.35,"top":0.5})
-        self.add_widget(self.btn2)
-        self.dev_mode = Button(text = "Dev Mode",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.dev_mode.bind(on_press = self.switch_to_dev_screen)
-        self.add_widget(self.dev_mode)
-        
-    def switch_screen(self, *args):
-        self.manager.current = "another"
-    def switch_to_dev_screen(self, *args):
-        self.manager.current = "dev"
+        self.start()
 
-    
-    def cam(self,*args):
-        self.remove_widget(self.btn)
-        self.remove_widget(self.btn2)
-        self.camera = Camera(resolution=(640, 480))
-        with self.camera.canvas.before:
-             PushMatrix()
-             Rotate(angle=-90,origin=self.center)
-        with self.camera.canvas.after:
-            PopMatrix()
-        self.camera.play = True
-        self.image=Image()
-        self.take_picture_button = Button(text = "Take Picture",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-        self.take_picture_button.bind(on_press = self.take_picture)
-        self.switch_to_choose = Button(text = "Choose existing instead",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.switch_to_choose.bind(on_press = self.switch_screen)
-        self.add_widget(self.camera)
-        self.add_widget(self.take_picture_button)
-        self.add_widget(self.switch_to_choose)
-
-
-        
-    
-    def take_picture(self, *args):
-        timestr = time.strftime("%Y%m%d_%H%M%S")
-        self.camera.export_to_png("/data/user/0/org.gingidetect.gingidetect/IMG_{}.png".format(timestr))
-        self.camera.play = False
-
-        self.remove_widget(self.camera)
-        self.remove_widget(self.take_picture_button)
-        
-        
-        self.confirm=Label(text = "Use this image?",pos_hint={"y":0.43})
-        self.add_widget(self.confirm)
-        self.use_image = Button(text = "Confirm",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-
-        #bind to image processing
-        self.use_image.bind(on_press = lambda *args:DeveloperScreen.image_process(self=DeveloperScreen,filename=self.image.source,isdev=False))
-        self.add_widget(self.use_image)
-        self.take_another = Button(text = "Retry",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.take_another.bind(on_press = self.check)
-        self.add_widget(self.take_another)
-
+    def start(self):
+        anim = Animation(opacity=1, duration=1)
+        anim += Animation(opacity=1, duration=1)
+        anim += Animation(opacity=0, duration=1)
+        anim.bind(on_complete=self.start2)
+        anim.start(self.ids["welcometxt1"])
         
 
-    def check(self,*args):
-            self.remove_widget(self.take_another)
-            self.remove_widget(self.use_image)
-            self.cam()
+    def start2(self,*args):
+        anim = Animation(opacity=1, duration=1)
+        anim += Animation(opacity=1, duration=0.5)
+        anim += Animation(pos=(0, 60), t='in_quad')
+        anim.bind(on_complete=self.start3)
+        anim.start(self.ids["welcometxt2"])
 
-class DeveloperScreen(Screen,FloatLayout):
-    def __init__(self, **kwargs):
-        super(DeveloperScreen,self).__init__(**kwargs)
-        print(self)
-        print(type(self))
-        self.confirm=Label(text = "Developer mode is a setting where you can see the process of how your image \nis determined whether it has Gingivitis or not",pos_hint={"y":0.43})
-        self.add_widget(self.confirm)
-        self.btn = Button(text ="Take a Picture",on_press = self.cam,size_hint=[0.35,0.05],pos_hint={"x":0.35,"top":0.4})
-        self.add_widget(self.btn)
-        self.btn2 = Button(text ="Choose Existing", on_press=self.switch_to_dev_gallery,size_hint=[0.35,0.05],pos_hint={"x":0.35,"top":0.5})
-        self.add_widget(self.btn2)
-        self.image = Image()
+    def start3(self,*args):
+        anim = Animation(opacity=1, duration=1)
+        anim += Animation(opacity=1, duration=0.5)
+        anim.start(self.ids["startbtn"])
 
-    def switch_to_dev_gallery(self, *args):
-        self.manager.current = "devgall"
-    
-    def cam(self,*args):
-
-        self.remove_widget(self.btn)
-        self.remove_widget(self.btn2)
-        self.camera = Camera(resolution=(640, 480))
-        with self.camera.canvas.before:
-             PushMatrix()
-             Rotate(angle=-90,origin=self.center)
-        with self.camera.canvas.after:
-            PopMatrix()
-        self.camera.play = True
-        self.image=Image()
-        self.take_picture_button = Button(text = "Take Picture",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-        self.take_picture_button.bind(on_press = self.take_picture)
-        self.switch_to_choose = Button(text = "Choose existing instead",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.switch_to_choose.bind(on_press = self.switch_screen)
-        self.add_widget(self.camera)
-        self.add_widget(self.take_picture_button)
-        self.add_widget(self.switch_to_choose)
-
-    def take_picture(self, *args):
-        self.remove_widget(self.confirm)
-        timestr = time.strftime("%Y%m%d_%H%M%S")
-        self.camera.export_to_png("/data/user/0/org.gingidetect.gingidetect/IMG_{}.png".format(timestr))
-        self.camera.play = False
-        self.remove_widget(self.camera)
-        self.remove_widget(self.take_picture_button)
-        self.image.source = str("/data/user/0/org.gingidetect.gingidetect/IMG_{}.png".format(timestr))
-        self.add_widget(self.image)
-        self.confirm=Label(text = "Use this image?",pos_hint={"y":0.43})
-        self.add_widget(self.confirm)
-        self.use_image = Button(text = "Confirm",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-        
-        #bind to image processing
-        self.use_image.bind(on_press = lambda *args:self.image_process(filename=self.image.source,isdev=True))
-        self.add_widget(self.use_image)
-        self.take_another = Button(text = "Retry",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.take_another.bind(on_press = self.check)
-        self.add_widget(self.take_another)
 
     def switch_screen(self, *args):
+        
         self.manager.current = "another"
-
-    def check(self,*args):
-            self.remove_widget(self.take_another)
-            self.remove_widget(self.use_image)
-            self.cam()
-
-    def check2(self,*args):
-            self.remove_widget(self.take_another)
-            self.remove_widget(self.image)
-            self.remove_widget(self.confirm)
-            self.gallery()
-
-    def res1(self,*args):
-        self.remove_widget(self.image)
-        #self.remove_widget(self.go_next)
-        self.image.source = 'res1.jpg'
-        self.add_widget(self.image)
-        self.go_next = Button(text = "Next",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-        self.go_next.bind(on_press = lambda *args: DeveloperScreen.res(self=self))
-        self.add_widget(self.go_next)
-
-    def res(self,*args):
-        self.remove_widget(self.image)
-        #self.remove_widget(self.go_next)
-        self.image.source = 'res.jpg'
-        self.add_widget(self.image)
-        self.go_next = Button(text = "Next",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-
-        #bind to model
-        self.go_next.bind(on_press = lambda *args: DeveloperScreen.res2(self=self))
-        self.add_widget(self.go_next)
-        self.go_back = Button(text = "Back",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.go_back.bind(on_press =lambda *args: DeveloperScreen.resback(self=self))
-        self.add_widget(self.go_back)
         
 
-    def resback(self,*args):
-        self.remove_widget(self.go_back)
-        DeveloperScreen.res1(self=self)
-
-    def res2(self,*args):
-        self.remove_widget(self.image)
-        #self.remove_widget(self.go_next)
-        self.image.source = 'res2.jpg'
-        self.add_widget(self.image)
-        self.go_next = Button(text = "Next",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-
-        #bind to model
-        self.go_next.bind(on_press =lambda *args: DeveloperScreen.contour_point_simple(self=self))
-        self.add_widget(self.go_next)
-        self.go_back = Button(text = "Back",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.go_back.bind(on_press = lambda *args: DeveloperScreen.res(self=self))
-        self.add_widget(self.go_back)
-
-    def contour_point_simple(self,*args):
-        self.remove_widget(self.image)
-        #self.remove_widget(self.go_next)
-        self.image.source = 'contour_point_simple.jpg'
-        self.add_widget(self.image)
-        self.go_next = Button(text = "Next",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-
-        #bind to model
-        #self.go_next.bind(on_press = self.next(self.image.source))
-        self.add_widget(self.go_next)
-        self.go_back = Button(text = "Back",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.go_back.bind(on_press = lambda *args: DeveloperScreen.res2(self=self))
-        self.add_widget(self.go_back)
-
+class CameraInstructionsScreen(Screen):
     
+    def switch_screen(self, *args):
     
-    def image_process(self,*args, filename, isdev):
-        img = cv2.imread(filename)
-        ORANGE_MIN = np.array([3, 139, 82],np.uint8)
-        ORANGE_MAX = np.array([6, 255, 255],np.uint8)
+        self.camera_screen = CameraScreen(name="cam")
         
+        self.manager.add_widget(self.camera_screen)
+        #self.parent.get_screen('cam').start()
+        self.manager.current = "cam"
+
+class DisplayProcessedImageScreen(Screen):
+    
+    def start(self, contourlength,prediction,filename):
+        predlbl = self.ids['predictlbl']
+        infolbl = self.ids['infolbl']
+        img = self.ids['dpimage']
+        lbl = self.ids['contournumlbl']
+        lbl.text="The image has "+contourlength+" contours found"
+        
+        
+        img.source=filename
+        predlbl.text="The image is "+prediction
+        if prediction.lower()=="gingivitis":
+            infolbl.text="Gum diseases such as Gingivitis can lead to complications. Please visit your dentist whenever you can"
+        if prediction.lower()=="healthy":
+            infolbl.text="Keep taking care of your teeth and gums!"
+
+    def switch_screen(self, *args):
+        self.manager.current = "mainmenu"
+
+
+
+class ProcessScreen(Screen):
+    
+    def start(self,filename):
+        self.filename=filename
+        img = self.ids['takenimg']
+        
+        img.source=filename
+    
+    #confirm
+    def image_process(self,*args):
+        img2 = cv2.imread(self.filename)
+
+        ORANGE_MIN = np.array([5, 145, 94],np.uint8)
+        ORANGE_MAX = np.array([8, 255, 255],np.uint8)
+        img=cv2.rotate(img2, cv2.ROTATE_90_COUNTERCLOCKWISE)
         hsv_img = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
         cv2.imwrite('res1.jpg', hsv_img)
         
@@ -231,233 +121,63 @@ class DeveloperScreen(Screen,FloatLayout):
         cv2.imwrite('res.jpg', frame_threshed)
         
 
-        kernel = np.ones((3, 3), np.uint8)
+        kernel = np.ones((10, 10), np.uint8)
         closing = cv2.morphologyEx(frame_threshed, cv2.MORPH_CLOSE, kernel, iterations=1)
         cv2.imwrite('res2.jpg', closing)
         
 
-        contours2, hierarchy2 = cv2.findContours(closing, cv2.RETR_TREE,
-                                                    cv2.CHAIN_APPROX_SIMPLE)
-        image_copy2 = img.copy()
-        #cv2.drawContours(image_copy2, contours2, -1, (0, 255, 0), 2, cv2.LINE_AA)
-        #cv2.imshow('SIMPLE Approximation contours', image_copy2)
-        #cv2.waitKey(0)
-        image_copy3 = img.copy()
-        for i, contour in enumerate(contours2): # loop over one contour area
-            for j, contour_point in enumerate(contour): # loop over the points
-                # draw a circle on the current contour coordinate
-                cv2.circle(image_copy3, ((contour_point[0][0], contour_point[0][1])), 2, (0, 255, 0), 2, cv2.LINE_AA)
-        # see the results
-        cv2.imwrite('contour_point_simple.jpg', image_copy3)
-        if isdev==True:
-            self.remove_widget(self.image)
-            self.remove_widget(self.use_image)
-            self.remove_widget(self.take_another)
-            self.image.source = 'res1.jpg'
-            self.add_widget(self.image)
-            self.go_next = Button(text = "Next",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-            self.go_next.bind(on_press =lambda *args: DeveloperScreen.res(self=self))
-            self.add_widget(self.go_next)
+        contours, hierarchy = cv2.findContours(image=closing, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
 
-class DevGalleryScreen(Screen,FloatLayout):
-    def __init__(self, **kwargs):
-        super(DevGalleryScreen,self).__init__(**kwargs)
-        self.manager_open = False
-        self.manager = None
-        self.gallery()
+        image_copy = img.copy()
+        contourlength=str(len(contours))
 
+        cv2.drawContours(image=image_copy, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=4, lineType=cv2.LINE_AA)
+                
+        cv2.imwrite('contour_point_simple.jpg', image_copy)
+
+        predict="No prediction"
+        self.parent.get_screen('dpimage').start(contourlength,predict,self.filename)
+        self.manager.current = "dpimage"
+
+    #retake
     def switch_screen(self, *args):
-        self.manager.current = "dev"
+        self.manager.current = "mainmenu"
 
-    def check(self,*args):
-            self.remove_widget(self.take_another)
-            self.remove_widget(self.image)
-            self.remove_widget(self.confirm)
-            self.gallery()
 
-    def gallery(self,*args):
-        self.image = Image()
-        #self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.gingidetect.gingidetect/')
-        self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath=SD_CARD)
-        self.filechooser.bind(on_selection=lambda x: self.selected(self.filechooser.selection))
- 
-        self.open_btn = Button(text='open', size_hint=(0.35,0.05),pos_hint={"x":0.10,"top":0.07})
-        self.open_btn.bind(on_release=lambda x: self.open(self.filechooser.path, self.filechooser.selection))
-        self.back_to_main=Button(text='Back to main menu', size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-        self.back_to_main.bind(on_press=self.switch_screen)
-
-        self.add_widget(self.back_to_main)
-        self.add_widget(self.filechooser)
-        self.add_widget(self.open_btn)
-
-    def select_path(self, path):
-        self.image.source = str(path[0])
-        self.add_widget(self.image)
-        self.confirm=Label(text = "Use this image?",pos_hint={"y":0.43})
-        self.add_widget(self.confirm)
-        self.remove_widget(self.filechooser)
-        self.remove_widget(self.open_btn)
-        self.remove_widget(self.back_to_main)
-        self.use_image = Button(text = "Confirm",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-
-        #bind to image processing
-        self.use_image.bind(on_press =lambda *args: DeveloperScreen.image_process(self=self,filename=self.image.source,isdev=True))
-        self.add_widget(self.use_image)
-        self.take_another = Button(text = "Retry",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.take_another.bind(on_press = self.check)
-        self.add_widget(self.take_another)
-        toast(path)
-
-    def exit_manager(self, *args):
-        '''Called when the user reaches the root of the directory tree.'''
-
-        self.manager.dismiss()
-        self.remove_widget(self.filechooser)
-
-    def open(self, path, filename):
-        self.image.source = str(filename[0])
-        self.add_widget(self.image)
-        self.confirm=Label(text = "Use this image?",pos_hint={"y":0.43})
-        self.add_widget(self.confirm)
-        self.remove_widget(self.filechooser)
-        self.remove_widget(self.open_btn)
-        self.remove_widget(self.back_to_main)
-        self.use_image = Button(text = "Confirm",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-
-        #bind to image processing
-        self.use_image.bind(on_press =lambda *args: DeveloperScreen.image_process(self=self,filename=self.image.source,isdev=True))
-        self.add_widget(self.use_image)
-        self.take_another = Button(text = "Retry",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.take_another.bind(on_press = self.check)
-        self.add_widget(self.take_another)
-
-class AnotherScreen(Screen,FloatLayout):
+class MainMenuScreen(Screen):
     def __init__(self, **kwargs):
-        super(AnotherScreen,self).__init__(**kwargs)
-        self.gallery()
-
-    def switch_screen(self, *args):
-        self.manager.current = "main"
-
-    def check(self,*args):
-            self.remove_widget(self.take_another)
-            self.remove_widget(self.image)
-            self.remove_widget(self.confirm)
-            self.gallery()
-
-    def gallery(self,*args):
-        self.image = Image()
-        self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.gingidetect.gingidetect/')
-        #self.filechooser = FileChooserListView(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath=SD_CARD)
-        self.filechooser.bind(on_selection=lambda x: self.selected(self.filechooser.selection))
- 
-        self.open_btn = Button(text='open', size_hint=(0.35,0.05),pos_hint={"x":0.10,"top":0.07})
-        self.open_btn.bind(on_release=lambda x: self.open(self.filechooser.path, self.filechooser.selection))
-        self.back_to_main=Button(text='Back to main menu', size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-        self.back_to_main.bind(on_press=self.switch_screen)
-
-        self.add_widget(self.back_to_main)
-        self.add_widget(self.filechooser)
-        #self.filechooser.show('/')
-        toast(self.filechooser)
-        self.add_widget(self.open_btn)
-
-    def select_path(self, path):
-        #self.image.source = str(path[0])
-        ms = "/storage/emulated/0/DCIM/Screenshots/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg"
-        bro=cv2.imread(ms)
-        cv2.imwrite('res1.jpg', bro)
-        self.image.source="res1.jpg"
-        self.add_widget(self.image)
-        self.confirm=Label(text = "Use this image?",pos_hint={"y":0.43})
-        self.add_widget(self.confirm)
-        self.remove_widget(self.filechooser)
-        self.remove_widget(self.open_btn)
-        self.remove_widget(self.back_to_main)
-        self.use_image = Button(text = "Confirm",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-
-        #bind to image processing
-        self.use_image.bind(on_press =lambda *args: DeveloperScreen.image_process(self=self,filename=self.image.source,isdev=False))
-        self.add_widget(self.use_image)
-        self.take_another = Button(text = "Retry",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.take_another.bind(on_press = self.check)
-        self.add_widget(self.take_another)
-        toast(path)
-
-    def exit_manager(self, *args):
-        '''Called when the user reaches the root of the directory tree.'''
-        self.remove_widget(self.filechooser)
-
-    def open(self, path, filename):
-        #self.image.source = str(filename[0])
-        ms = "/storage/emulated/0/DCIM/Screenshots/Screenshot_2023-02-09-20-08-13-569_org.adblockplus.browser.jpg"
-        bro=cv2.imread(ms)
-        cv2.imwrite('res1.jpg', bro)
-        self.image.source="res1.jpg"
-        self.add_widget(self.image)
-        self.confirm=Label(text = "Use this image?",pos_hint={"y":0.43})
-        self.add_widget(self.confirm)
-        self.remove_widget(self.filechooser)
-        self.remove_widget(self.open_btn)
-        self.remove_widget(self.back_to_main)
-        self.use_image = Button(text = "Confirm",size_hint=[0.35,0.05],pos_hint={"x":0.55,"top":0.07})
-
-        #bind to image processing
-        self.use_image.bind(on_press =lambda *args: DeveloperScreen.image_process(self=DeveloperScreen,filename=self.image.source,isdev=False))
-        self.add_widget(self.use_image)
-        self.take_another = Button(text = "Retry",size_hint=[0.35,0.05],pos_hint={"x":0.10,"top":0.07})
-        self.take_another.bind(on_press = self.check)
-        self.add_widget(self.take_another)
-
-class Main(MDApp):
-    def build(self):
-        if platform == 'android':
-            from android.permissions import request_permissions, Permission
-            request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
-
+        super(MainMenuScreen,self).__init__(**kwargs)
+        self.dialog=None
+    
+    def start(self,*args):
         
-        self.screen_manager = ScreenManager()
-        self.main_screen = MainScreen(name="main")
-        self.another_screen = AnotherScreen(name="another")
-        self.dev_mode_screen = DeveloperScreen(name="dev")
-        self.dev_mode_gallery = DevGalleryScreen(name="devgall")
-        self.screen_manager.add_widget(self.main_screen)
-        self.screen_manager.add_widget(self.another_screen)
-        self.screen_manager.add_widget(self.dev_mode_screen)
-        self.screen_manager.add_widget(self.dev_mode_gallery)
-        return self.screen_manager
+        anim = Animation(opacity=1, duration=0.2)
+        anim += Animation ( pos=(0,300), t="in_quad")
+        anim.start(self.ids["cambtn"])
 
-if __name__ == '__main__':
-    Main().run()
+        anim2 = Animation(opacity=1, duration=0.2)
+        anim2 += Animation ( pos=(0,200), t="in_quad")
+        anim2.start(self.ids["gallerybtn"])
 
-class SharedStorageExample(App):
+        anim3 = Animation(opacity=1, duration=0.2)
+        anim3 += Animation ( pos=(0,100), t="in_quad")
+        anim3.start(self.ids["howbtn"])
 
-    def build(self):
-        Window.bind(on_keyboard = self.quit_app)
-        # create chooser listener
-        self.chooser = Chooser(self.chooser_callback)
-  
-        # cleanup from last time if Android didn't
-        temp = SharedStorage().get_cache_dir()
-        if temp and exists(temp):
-            rmtree(temp)
-
-        # layout
-        self.label = Label(text = 'Greetings Earthlings')
-        self.button = Button(text = 'Choose an image file',
-                             on_press = self.chooser_start,
-                             size_hint=(1, .15))
-        #self.filechooser = Image(size_hint=(1,0.8),pos_hint={"top":0.9},rootpath='/data/user/0/org.test.myapp/')
-        self.filechooser = Image()
-        self.layout = BoxLayout(orientation='vertical')
-        self.layout.add_widget(self.label)
-        self.layout.add_widget(self.button)
-        self.layout.add_widget(self.filechooser)
-        return self.layout
-
-    def on_start(self):
-        self.dont_gc = AndroidPermissions(self.start_app)
-
+    def switch_screen2(self, *args):
+        self.manager.current = "main"
+            
+    def switch_screen(self, *args):
+        
+        #self.camera_screen = CameraScreen(name="cam")
+        
+        #self.manager.add_widget(self.camera_screen)
+        #self.parent.get_screen('cam').start()
+        self.manager.current = "caminst"
+        
+    
+        #self.chooser = Chooser(self.chooser_callback)
+    #code for take from gallery
+    
     def quit_app(self,window,key,*args):
         if key == 27:
             mActivity.finishAndRemoveTask() 
@@ -471,7 +191,6 @@ class SharedStorageExample(App):
         app_title = str(ss.get_app_title())
         self.label_lines = []
         self.display("")
-        self.append("Cache Dir Exists:  " + str(ss.get_cache_dir()))
 
         self.display("")
 
@@ -489,24 +208,67 @@ class SharedStorageExample(App):
                 if path:
                     # then to app shared
                     shared = ss.copy_to_shared(path)
-                    self.append("Result copied to app shared "+\
-                                str(exists(path) and shared != None))
-                newsource="/storage/emulated/0/Android/data/org.test.myapp/cache/FromSharedStorage/"+str(filename)
-            self.display(newsource)
+                
+            self.display(str(path))
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
             Logger.warning(str(e))
+        
+    def switch_screen3(self, *args):
+        self.manager.current = "another"
 
-    # Label text
-    def append(self, name):
-        self.label_lines.append(name)
+class AnotherScreen(Screen):
+    def switch_screen(self, *args):
+        self.parent.get_screen('mainmenu').start()
+        self.manager.current = "mainmenu"
 
-    @mainthread
-    def display(self,ssource):
-        if self.label:
-            self.filechooser.source=ssource
-            self.label.text = ''
-            for r in self.label_lines:
-                self.label.text += fill(r, 40) + '\n'
+class CameraScreen(Screen):
+    def capture(self):
 
-SharedStorageExample().run()
+        
+        camera = self.ids['camera']
+        timestr = time.strftime("%Y%m%d_%H%M%S")
+        
+        source=camera.export_to_png("IMG_{}.png".format(timestr))
+        img2 = cv2.imread("IMG_{}.png".format(timestr))
+        img=cv2.rotate(img2, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        cv2.imwrite('contour_point_simple.jpg', img)
+        camera.play=False
+        self.parent.get_screen('process').start("IMG_{}.png".format(timestr))
+        
+        self.manager.current = "process"
+
+    
+    def switch_screen(self, *args):
+        self.manager.current = "mainmenu"
+    #def start(self,*args):
+
+class MainApp(MDApp):
+    def build(self):
+        temp = SharedStorage().get_cache_dir()
+        if temp and exists(temp):
+            rmtree(temp)
+        self.dont_gc = None
+        dont_gc = AndroidPermissions(self.start_app)
+        self.screen_manager = ScreenManager()
+        self.main_screen = MainScreen(name="main")
+        self.another_screen = AnotherScreen(name="another")
+        self.mainmenu_screen = MainMenuScreen(name="mainmenu")
+        self.camerainst_screen = CameraInstructionsScreen(name="caminst")
+        self.process_screen = ProcessScreen(name="process")
+        self.dpimage_screen = DisplayProcessedImageScreen(name="dpimage")
+        
+        self.screen_manager.add_widget(self.main_screen)
+        self.screen_manager.add_widget(self.another_screen)
+        self.screen_manager.add_widget(self.mainmenu_screen)
+        self.screen_manager.add_widget(self.camerainst_screen)
+        self.screen_manager.add_widget(self.process_screen)
+        self.screen_manager.add_widget(self.dpimage_screen)
+        self.screen_manager.current = "main"
+        return self.screen_manager
+    
+    
+
+if __name__ == '__main__':
+    MainApp().run()
+
