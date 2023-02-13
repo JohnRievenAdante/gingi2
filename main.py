@@ -10,6 +10,7 @@ from shutil import rmtree
 from textwrap import fill
 import time
 import cv2
+from os.path import exists, join
 import numpy as np
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
@@ -190,9 +191,6 @@ class MainMenuScreen(Screen):
         ss = SharedStorage()
         app_title = str(ss.get_app_title())
         self.label_lines = []
-        self.display("")
-
-        self.display("")
 
     # Chooser interface
     def chooser_start(self,bt):
@@ -209,7 +207,7 @@ class MainMenuScreen(Screen):
                     # then to app shared
                     shared = ss.copy_to_shared(path)
                 
-            self.display(str(path))
+            
         except Exception as e:
             Logger.warning('SharedStorageExample.chooser_callback():')
             Logger.warning(str(e))
